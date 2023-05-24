@@ -9,13 +9,12 @@ class UserController {
 
     getAll() {
         console.log(123);
-
     }
 
     async create(req: Request, res: Response) {
         try {
             const userData = req.body;
-            this.userService.create(userData);
+            return this.userService.create(userData, res);
         } catch (err) {
             console.log(err);
         }

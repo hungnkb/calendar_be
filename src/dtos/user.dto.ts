@@ -1,12 +1,11 @@
-import { IsNotEmpty, IsAlpha, IsEmail, IsStrongPassword } from "class-validator";
+import { IsEmail, IsStrongPassword, IsOptional } from "class-validator";
+import { roleEnum } from "../models/users.schema";
 
 export class CreateUserDto {
-    @IsNotEmpty()
-    @IsAlpha()
+    @IsOptional()
     firstName: string;
 
-    @IsNotEmpty()
-    @IsAlpha()
+    @IsOptional()
     lastName: string;
 
     @IsEmail()
@@ -14,4 +13,22 @@ export class CreateUserDto {
 
     @IsStrongPassword()
     password: string;
+
+    @IsOptional()
+    role: roleEnum;
+}
+
+export class EditUserDto {
+    @IsOptional()
+    firstName: string;
+
+    @IsOptional()
+    lastName: string;
+
+    @IsOptional()
+    @IsStrongPassword()
+    password: string;
+
+    @IsOptional()
+    role: roleEnum;
 }

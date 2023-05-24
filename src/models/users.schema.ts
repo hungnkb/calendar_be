@@ -2,14 +2,16 @@ import mongoose from 'mongoose';
 import { eventSchema } from './events.schema';
 const { Schema } = mongoose;
 
-enum roleEnum {
+export enum roleEnum {
     _User = 'user',
     _Admin = 'admin',
 }
-const userSchema = new Schema({
+export const userSchema = new Schema({
     firstName: String,
     lastName: String,
     email: String,
     password: String,
     role: { type: String, default: roleEnum._User }
 });
+
+export const UserSchema = mongoose.model('users', userSchema);

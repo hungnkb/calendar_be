@@ -35,24 +35,123 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
+var validate_1 = __importDefault(require("../middlewares/validate"));
+var users_schema_1 = require("../models/users.schema");
+var messageConstants_1 = require("../shared/constants/messageConstants");
+var bcrypt_1 = __importDefault(require("bcrypt"));
 var UserService = /** @class */ (function () {
     function UserService() {
         var _this = this;
-        this.create = function (userData) { return __awaiter(_this, void 0, void 0, function () {
+        this.create = function (userData, res) { return __awaiter(_this, void 0, void 0, function () {
+            var validateData, checkExist, hashPassword, newUser, err_1;
             return __generator(this, function (_a) {
-                try {
-                    console.log(userData, 123123132123);
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 9, , 10]);
+                        return [4 /*yield*/, validate_1.default.createUser(userData)];
+                    case 1:
+                        validateData = _a.sent();
+                        if (!validateData.success) return [3 /*break*/, 7];
+                        return [4 /*yield*/, this.findByEmail(userData.email)];
+                    case 2:
+                        checkExist = _a.sent();
+                        if (!checkExist) return [3 /*break*/, 3];
+                        res.status(400).json({ message: messageConstants_1.Message._USEREXIST, success: false });
+                        return [3 /*break*/, 6];
+                    case 3: return [4 /*yield*/, this.hashPassword(userData.password)];
+                    case 4:
+                        hashPassword = _a.sent();
+                        userData.password = hashPassword;
+                        return [4 /*yield*/, users_schema_1.UserSchema.create(userData)];
+                    case 5:
+                        newUser = _a.sent();
+                        if (newUser) {
+                            res.status(200).json({ message: messageConstants_1.Message._SUCCESS });
+                        }
+                        else {
+                            res.status(400).json({ message: messageConstants_1.Message._BADREQUEST, success: false });
+                        }
+                        _a.label = 6;
+                    case 6: return [3 /*break*/, 8];
+                    case 7: return [2 /*return*/, res.status(400).json({ message: validateData.message, success: false })];
+                    case 8: return [3 /*break*/, 10];
+                    case 9:
+                        err_1 = _a.sent();
+                        console.log(err_1);
+                        return [3 /*break*/, 10];
+                    case 10: return [2 /*return*/];
                 }
-                catch (err) {
-                    console.log(err);
-                }
-                return [2 /*return*/];
             });
         }); };
-        this.getAll = function () {
-        };
+        this.getAll = function () { return __awaiter(_this, void 0, void 0, function () {
+            var userList;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, users_schema_1.UserSchema.find()];
+                    case 1:
+                        userList = _a.sent();
+                        return [2 /*return*/, userList];
+                }
+            });
+        }); };
+        this.update = function (userData, id) { return __awaiter(_this, void 0, void 0, function () {
+            var keys, hashPassword, _i, keys_1, key;
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        keys = Object.keys(userData);
+                        if (!userData.password) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.hashPassword(userData.password)];
+                    case 1:
+                        hashPassword = _b.sent();
+                        userData.password = hashPassword;
+                        _b.label = 2;
+                    case 2:
+                        _i = 0, keys_1 = keys;
+                        _b.label = 3;
+                    case 3:
+                        if (!(_i < keys_1.length)) return [3 /*break*/, 6];
+                        key = keys_1[_i];
+                        return [4 /*yield*/, users_schema_1.UserSchema.findOneAndUpdate({ _id: id }, (_a = {}, _a[key] = userData[key], _a))];
+                    case 4:
+                        _b.sent();
+                        _b.label = 5;
+                    case 5:
+                        _i++;
+                        return [3 /*break*/, 3];
+                    case 6: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.hashPassword = function (password) { return __awaiter(_this, void 0, void 0, function () {
+            var saltRounds, salt, hashPassword;
+            return __generator(this, function (_a) {
+                saltRounds = +process.env.SALT_ROUNDS;
+                salt = bcrypt_1.default.genSaltSync(saltRounds);
+                hashPassword = bcrypt_1.default.hashSync(password, salt);
+                return [2 /*return*/, hashPassword];
+            });
+        }); };
+        this.findByEmail = function (email) { return __awaiter(_this, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, users_schema_1.UserSchema.findOne({ email: email })];
+                    case 1:
+                        user = _a.sent();
+                        if (user) {
+                            return [2 /*return*/, user];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
     }
     return UserService;
 }());

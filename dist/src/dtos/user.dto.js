@@ -9,19 +9,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUserDto = void 0;
+exports.EditUserDto = exports.CreateUserDto = void 0;
 var class_validator_1 = require("class-validator");
+var users_schema_1 = require("../models/users.schema");
 var CreateUserDto = exports.CreateUserDto = /** @class */ (function () {
     function CreateUserDto() {
     }
     __decorate([
-        (0, class_validator_1.IsNotEmpty)(),
-        (0, class_validator_1.IsAlpha)(),
+        (0, class_validator_1.IsOptional)(),
         __metadata("design:type", String)
     ], CreateUserDto.prototype, "firstName", void 0);
     __decorate([
-        (0, class_validator_1.IsNotEmpty)(),
-        (0, class_validator_1.IsAlpha)(),
+        (0, class_validator_1.IsOptional)(),
         __metadata("design:type", String)
     ], CreateUserDto.prototype, "lastName", void 0);
     __decorate([
@@ -32,6 +31,32 @@ var CreateUserDto = exports.CreateUserDto = /** @class */ (function () {
         (0, class_validator_1.IsStrongPassword)(),
         __metadata("design:type", String)
     ], CreateUserDto.prototype, "password", void 0);
+    __decorate([
+        (0, class_validator_1.IsOptional)(),
+        __metadata("design:type", String)
+    ], CreateUserDto.prototype, "role", void 0);
     return CreateUserDto;
+}());
+var EditUserDto = exports.EditUserDto = /** @class */ (function () {
+    function EditUserDto() {
+    }
+    __decorate([
+        (0, class_validator_1.IsOptional)(),
+        __metadata("design:type", String)
+    ], EditUserDto.prototype, "firstName", void 0);
+    __decorate([
+        (0, class_validator_1.IsOptional)(),
+        __metadata("design:type", String)
+    ], EditUserDto.prototype, "lastName", void 0);
+    __decorate([
+        (0, class_validator_1.IsOptional)(),
+        (0, class_validator_1.IsStrongPassword)(),
+        __metadata("design:type", String)
+    ], EditUserDto.prototype, "password", void 0);
+    __decorate([
+        (0, class_validator_1.IsOptional)(),
+        __metadata("design:type", String)
+    ], EditUserDto.prototype, "role", void 0);
+    return EditUserDto;
 }());
 //# sourceMappingURL=user.dto.js.map

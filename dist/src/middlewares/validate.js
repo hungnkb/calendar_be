@@ -36,30 +36,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var user_service_1 = require("../services/user.service");
-var UserController = /** @class */ (function () {
-    function UserController() {
-        this.userService = new user_service_1.UserService();
+var class_validator_1 = require("class-validator");
+var user_dto_1 = require("../dtos/user.dto");
+var messageConstants_1 = require("../shared/constants/messageConstants");
+var Validate = /** @class */ (function () {
+    function Validate() {
     }
-    UserController.prototype.getAll = function () {
-        console.log(123);
-    };
-    UserController.prototype.create = function (req, res) {
+    Validate.prototype.createUser = function (userData) {
         return __awaiter(this, void 0, void 0, function () {
-            var userData;
-            return __generator(this, function (_a) {
-                try {
-                    userData = req.body;
-                    return [2 /*return*/, this.userService.create(userData, res)];
+            var payload, _i, _a, _b, key, value, err, errorMessages, _c, err_1, i;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        payload = new user_dto_1.CreateUserDto();
+                        for (_i = 0, _a = Object.entries(userData); _i < _a.length; _i++) {
+                            _b = _a[_i], key = _b[0], value = _b[1];
+                            payload[key] = value;
+                        }
+                        return [4 /*yield*/, (0, class_validator_1.validate)(payload)];
+                    case 1:
+                        err = _d.sent();
+                        if (err.length > 0) {
+                            errorMessages = [];
+                            for (_c = 0, err_1 = err; _c < err_1.length; _c++) {
+                                i = err_1[_c];
+                                if (i.constraints) {
+                                    errorMessages.push(i.constraints);
+                                }
+                            }
+                            return [2 /*return*/, {
+                                    message: errorMessages,
+                                    success: false
+                                }];
+                        }
+                        return [2 /*return*/, {
+                                message: messageConstants_1.Message._SUCCESS,
+                                success: true
+                            }];
                 }
-                catch (err) {
-                    console.log(err);
-                }
-                return [2 /*return*/];
             });
         });
     };
-    return UserController;
+    return Validate;
 }());
-exports.default = new UserController();
-//# sourceMappingURL=user.controller.js.map
+exports.default = new Validate();
+//# sourceMappingURL=validate.js.map
