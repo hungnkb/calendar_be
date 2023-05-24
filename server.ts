@@ -9,13 +9,14 @@ dotenv.config();
 
 const app = express()
 const port = process.env.PORT || 5001;
+const connectionString = process.env.MONGODB;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 route(app);
 app.use(cors());
 
 app.listen(port, async () => {
-  await mongoose.connect('mongodb://127.0.0.1:27017/calendar').then(() => {
+  await mongoose.connect(connectionString).then(() => {
     console.log('Database connected')
   });
   console.log(`Example app listening on port ${port}`)

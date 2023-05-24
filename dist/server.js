@@ -48,6 +48,7 @@ var body_parser_1 = __importDefault(require("body-parser"));
 dotenv_1.default.config();
 var app = (0, express_1.default)();
 var port = process.env.PORT || 5001;
+var connectionString = process.env.MONGODB;
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(body_parser_1.default.json());
 (0, routes_1.default)(app);
@@ -55,7 +56,7 @@ app.use((0, cors_1.default)());
 app.listen(port, function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, mongoose_1.default.connect('mongodb://127.0.0.1:27017/calendar').then(function () {
+            case 0: return [4 /*yield*/, mongoose_1.default.connect(connectionString).then(function () {
                     console.log('Database connected');
                 })];
             case 1:
