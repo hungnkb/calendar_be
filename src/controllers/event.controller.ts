@@ -13,8 +13,12 @@ class EventController {
         return this.eventService.create(eventData, res);
     }
 
-    findAll = (req: Request, res: Response) => {
-        return this.eventService.findAll(res);
+    findAllByUserId = (req: Request, res: Response) => {
+        if (req.query.idUser) {      
+            return this.eventService.findByUserId(req.query.idUser, res);
+        } else if (req.query.id) {
+            
+        }
     }
 
     update = (req: Request, res: Response) => {
